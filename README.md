@@ -9,6 +9,8 @@ The forgery detection tool contained in this repository currently features foren
 Please read our paper for a detailed explanation of our motivation and research when developing this tool.
 
 ## To Run:
+Place any images that you wish to analyze into the **images** directory.
+
 Navigate to the **src** directory:
 ```
 $ cd src
