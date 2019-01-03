@@ -1,30 +1,17 @@
-
 from PIL import Image
-import scipy.misc
 from math import pow
+from tqdm import tqdm, trange
+
+import scipy.misc
 import numpy as np
 import builtins
-from tqdm import tqdm, trange
 import time
 
 import container
 import blocks
 
 class image_object(object):
-    """
-    Object to contains a single image, then detects a fraud in it
-    """
-
     def __init__(self, imageDirectory, imageName, blockDimension, outputDirectory):
-        """
-        Constructor to initialize the algorithm's parameters
-        :param imageDirectory: direktori file citra
-        :param imageName: nama file citra
-        :param blockDimension: ukuran blok dimensi (ex:32, 64, 128)
-        :param outputDirectory: direktori untuk hasil deteksi
-        :return: None
-        """
-
         print("\tStep 1 of 4: Object and variable initialization")
 
         # image parameter
@@ -72,11 +59,6 @@ class image_object(object):
         self.offsetDictionary = {}
 
     def run(self):
-        """
-        Run the created algorithm
-        :return: None
-        """
-
         # time logging (optional, for evaluation purpose)
         self.compute()
         startTimestamp = time.time()
@@ -100,10 +82,6 @@ class image_object(object):
         return imageResultPath
 
     def compute(self):
-        """
-        To compute the characteristic features of image block
-        :return: None
-        """
         print("\tStep 2 of 4: Computing characteristic features")
 
         imageWidthOverlap = self.imageWidth - self.blockDimension
@@ -125,17 +103,9 @@ class image_object(object):
                     self.featurescontainer.addBlock(imageBlock.computeBlock())
 
     def sort(self):
-        """
-        To sort the container's elements
-        :return: None
-        """
         self.featurescontainer.sortFeatures()
 
     def analyze(self):
-        """
-        To analyze pairs of image blocks
-        :return: None
-        """
         print("\tStep 3 of 4:Pairing image blocks")
         z = 0
         time.sleep(0.1)
@@ -150,14 +120,6 @@ class image_object(object):
                     break
 
     def isValid(self, firstBlock, secondBlock):
-        """
-        To check the validity of the image block pairs and each of the characteristic features,
-        also compute its offset, magnitude, and absolut value.
-        :param firstBlock: the first block
-        :param secondBlock: the second block
-        :return: is the pair of i and j valid?
-        """
-
         if abs(firstBlock - secondBlock) < self.Nn:
             iFeature = self.featurescontainer.container[firstBlock][1]
             jFeature = self.featurescontainer.container[secondBlock][1]
@@ -191,9 +153,6 @@ class image_object(object):
         return 0,
 
     def addDict(self, firstCoordinate, secondCoordinate, pairOffset):
-        """
-        Add a pair of coordinate and its offset to the dictionary
-        """
         if pairOffset in self.offsetDictionary:
             self.offsetDictionary[pairOffset].append(firstCoordinate)
             self.offsetDictionary[pairOffset].append(secondCoordinate)
@@ -201,9 +160,6 @@ class image_object(object):
             self.offsetDictionary[pairOffset] = [firstCoordinate, secondCoordinate]
 
     def reconstruct(self):
-        """
-        Reconstruct the image according to the fraud detectionr esult
-        """
         print("\tStep 4 of 4: Image reconstruction")
 
         # create an array as the canvas of the final image

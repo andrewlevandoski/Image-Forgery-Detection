@@ -3,16 +3,13 @@ import os
 import numpy as np
 import math
 
-# public static float[][][] getImageDifference(BufferedImage image1, BufferedImage image2) {
 def getImageDifference(image1, image2):
     height, width = image1.shape[:2]
-    # float[][][] outputMap=new float[3][width][height];
     outputMap = np.zeros((3, width, height))
+
     for i in range(0, width):
         for j in range (0, height):
-            # tmpColor1 = new Color(image1.getRGB(ii, jj));
             tmpColor1 = image1[i][j]
-            # tmpColor2 = new Color(image2.getRGB(ii, jj));
             tmpColor2 = image2[i][j]
             red_diff = int(tmpColor1[0]) - int(tmpColor2[0])
             green_diff = int(tmpColor1[1]) - int(tmpColor2[1])
@@ -30,9 +27,7 @@ def getELA(filename):
     quality = 75;
     displayMultiplier = 20;
 
-    # filename = sys.argv[1]
     origImage = cv2.imread(filename)
-
     outpath = "recompressed_" + filename
 
     cv2.imwrite(outpath, origImage, [int(cv2.IMWRITE_JPEG_QUALITY), quality])
@@ -41,14 +36,10 @@ def getELA(filename):
 
     elaMin = np.amax(imageDifference)
     elaMax = np.amin(imageDifference)
-    # int[][][] intDifference = new int[imageDifference.length][imageDifference[0].length][imageDifference[0][0].length];
     intDifference = np.zeros(imageDifference.shape)
 
-    # for (int ii=0;ii<imageDifference.length;ii++){
     for i in range(0, imageDifference.shape[0]):
-        # for (int jj=0;jj<imageDifference[0].length;jj++){
         for j in range(0, imageDifference.shape[1]):
-            # for (int kk=0;kk<imageDifference[0][0].length;kk++){
             for k in range(0, imageDifference.shape[2]):
                 intDifference[i][j][k] = int(math.sqrt(imageDifference[i][j][k]) * displayMultiplier)
                 if (intDifference[i][j][k] > 255):
@@ -59,18 +50,15 @@ def getELA(filename):
     ds_height = displaySurface_temp.shape[1]
     ds_width = displaySurface_temp.shape[2]
 
-    # Scale the image result in order to save execution time
     if (ds_height > ds_width):
         if (ds_height > sc_height):
             sc_width = (sc_height * ds_width) / ds_height
-            # displaySurface = Util.scaleImage(displaySurface_temp, sc_width, sc_height);
             displaySurface = cv2.resize(displaySurface_temp, (sc_width, sc_height))
         else:
             displaySurface = displaySurface_temp
     else:
         if (ds_width > sc_width):
             sc_height = (sc_width * ds_height) / ds_width
-            # displaySurface = Util.scaleImage(displaySurface_temp, sc_width, sc_height);
             displaySurface = cv2.resize(displaySurface_temp, (sc_width, sc_height))
         else:
             displaySurface = displaySurface_temp

@@ -1,21 +1,8 @@
-
 import numpy as np
 from sklearn.decomposition import PCA
 
 class blocks(object):
-    """
-    Contains a single image block and handle the calculation of characteristic features
-    """
-
     def __init__(self, grayscaleImageBlock, rgbImageBlock, x, y, blockDimension):
-        """
-        Initializing the input image
-        :param grayscaleImageBlock: grayscale image block
-        :param rgbImageBlock: rgb image block
-        :param x: x coordinate (upper-left)
-        :param y: y coordinate (upper-left)
-        :return: None
-        """
         self.imageGrayscale = grayscaleImageBlock  # block of grayscale image
         self.imageGrayscalePixels = self.imageGrayscale.load()
 
@@ -30,10 +17,6 @@ class blocks(object):
         self.blockDimension = blockDimension
 
     def computeBlock(self):
-        """
-        Create a representation of the image block
-        :return: image block representation data
-        """
         blockDataList = []
         blockDataList.append(self.coor)
         blockDataList.append(self.computeCharaFeatures(4))
@@ -41,11 +24,6 @@ class blocks(object):
         return blockDataList
 
     def computePCA(self, precision):
-        """
-        Compute Principal Component Analysis from the image block
-        :param precision: characteristic features precision
-        :return: Principal Component from the image block
-        """
         PCAModule = PCA(n_components=1)
         if self.isImageRGB:
             imageArray = np.array(self.imageRGB)
@@ -66,15 +44,8 @@ class blocks(object):
             return preciseResult
 
     def computeCharaFeatures(self, precision):
-        """
-        Compute 7 characteristic features from every image blocks
-        :param precision: feature characteristic precision
-        :return: None
-        """
-
         characteristicFeaturesList = []
 
-        # variable to compute characteristic features
         c4_part1 = 0
         c4_part2 = 0
         c5_part1 = 0
@@ -83,8 +54,6 @@ class blocks(object):
         c6_part2 = 0
         c7_part1 = 0
         c7_part2 = 0
-
-        """ Compute c1, c2, c3 according to the image block's colorspace """
 
         if self.isImageRGB:
             sumOfRedPixelValue = 0
@@ -111,25 +80,20 @@ class blocks(object):
             characteristicFeaturesList.append(0)
             characteristicFeaturesList.append(0)
 
-        """ Compute  c4, c5, c6 and c7 according to the pattern rule on the second paper"""
-        for yCoordinate in range(0, self.blockDimension):  # compute the part 1 and part 2 of each feature characteristic
+        for yCoordinate in range(0, self.blockDimension):
             for xCoordinate in range(0, self.blockDimension):
-                # compute c4
                 if yCoordinate <= self.blockDimension / 2:
                     c4_part1 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
                 else:
                     c4_part2 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
-                # compute c5
                 if xCoordinate <= self.blockDimension / 2:
                     c5_part1 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
                 else:
                     c5_part2 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
-                # compute c6
                 if xCoordinate - yCoordinate >= 0:
                     c6_part1 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
                 else:
                     c6_part2 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
-                # compute c7
                 if xCoordinate + yCoordinate <= self.blockDimension:
                     c7_part1 += self.imageGrayscalePixels[xCoordinate, yCoordinate]
                 else:

@@ -1,15 +1,4 @@
-# Ad-hoc algorithm for copy-move forgery detection in images.
-# Implemented by - vasiliauskas.agnius@gmail.com
-# Robust match algorithm steps:
-#  1. Blur image for eliminating image details
-#  2. Convert image to degraded palette
-#  3. Decompose image into small NxN pixel blocks
-#  4. Alphabetically order these blocks by their pixel values
-#  5. Extract only these adjacent blocks which have small absolute color difference
-#  6. Cluster these blocks into clusters by intersection area among blocks
-#  7. Extract only these clusters which are bigger than block size
-#  8. Extract only these clusters which have similar cluster, by using some sort of similarity function (in this case Hausdorff distance between clusters)
-#  9. Draw discovered similar clusters on image
+# Implementation derived from vasiliauskas.agnius@gmail.com
 
 import sys
 from PIL import Image, ImageFilter, ImageDraw
@@ -107,12 +96,6 @@ def similarparts(imagparts, opt):
  return dupl
 
 def clusterparts(parts, block_len, opt):
- """
- Further filtering out non essential blocks.
- This is done by clustering blocks at first and after that
- filtering out small clusters and clusters which doesn`t have
- twin cluster in image.
- """
  parts = sorted(parts, key=op.itemgetter(-1))
  clusters = [[parts[0][-1]]]
 
@@ -151,9 +134,6 @@ def clusterparts(parts, block_len, opt):
  return clusters
 
 def marksimilar(image, clust, size, opt):
- """
- Draw discovered similar image regions.
- """
  blocks = []
  if clust:
   draw = ImageDraw.Draw(image)
