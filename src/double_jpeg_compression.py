@@ -17,6 +17,8 @@ def detect(input):
     dct_cols = 0;
 
     image = cv2.imread(input)
+    if image is None:
+        sys.exit("Could not read from image: {}. Please ensure you have read permissions".format(input))
     shape = image.shape;
 
     if shape[0]%8 != 0: dct_rows = shape[0]+8-shape[0]%8
