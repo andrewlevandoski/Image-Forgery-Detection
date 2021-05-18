@@ -5,6 +5,7 @@ import double_jpeg_compression
 import copy_move_cfa
 import copy_move_detection
 import noise_variance
+import os.path as path
 
 from optparse import OptionParser
 
@@ -25,18 +26,22 @@ if __name__ == '__main__':
         sys.exit()
     im_str = str(args[0])
 
+    input = '..//images//' + im_str
+    if not path.exists(input):
+        sys.exit("Image not found: {}. Please place the image in the images subdirectory.".format(im_str))
+
     print('\nRunning double jpeg compression detection...')
-    double_compressed = double_jpeg_compression.detect('..//images//' + im_str)
+    double_compressed = double_jpeg_compression.detect(input)
 
     if(double_compressed): print('\nDouble compression detected')
     else: print('\nSingle compressed')
 
     print('\nRunning CFA artifact detection...\n')
-    identical_regions_cfa = copy_move_cfa.detect('..//images//' + im_str, opt, args)
+    identical_regions_cfa = copy_move_cfa.detect(input, opt, args)
     print('\n' + str(identical_regions_cfa), 'CFA artifacts detected')
 
     print('\nRunning noise variance inconsistency detection...')
-    noise_forgery = noise_variance.detect('..//images//' + im_str)
+    noise_forgery = noise_variance.detect(input)
 
     if(noise_forgery): print('\nNoise variance inconsistency detected')
     else: print('\nNo noise variance inconsistency detected')

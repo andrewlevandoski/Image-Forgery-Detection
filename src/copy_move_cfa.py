@@ -134,6 +134,7 @@ def clusterparts(parts, block_len, opt):
  return clusters
 
 def marksimilar(image, clust, size, opt):
+ block_len = 15
  blocks = []
  if clust:
   draw = ImageDraw.Draw(image)
@@ -148,10 +149,10 @@ def marksimilar(image, clust, size, opt):
   	image.paste(im,(x,y,x+size,y+size))
   if int(opt.imauto):
    for cl in clust:
-    cx1 = min([cx for cx,cy in cl])
-    cy1 = min([cy for cx,cy in cl])
-    cx2 = max([cx for cx,cy in cl]) + block_len
-    cy2 = max([cy for cx,cy in cl]) + block_len
+    cx1 = min([cx for cx,_ in cl])
+    cy1 = min([cy for _,cy in cl])
+    cx2 = max([cx for cx,_ in cl]) + block_len
+    cy2 = max([cy for _,cy in cl]) + block_len
     draw.rectangle([cx1,cy1,cx2,cy2],outline="magenta")
  return image
 
