@@ -2,7 +2,7 @@ from PIL import Image
 from math import pow
 from tqdm import tqdm, trange
 
-import scipy.misc
+import imageio
 import numpy as np
 import builtins
 import time
@@ -229,7 +229,7 @@ class image_object(object):
                         linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate, 1] = 255
 
         timeStamp = time.strftime("%Y%m%d_%H%M%S")
-        scipy.misc.imsave(self.imageOutputDirectory + timeStamp + "_" + self.imagePath, groundtruthImage)
-        scipy.misc.imsave(self.imageOutputDirectory + timeStamp + "_lined_" + self.imagePath, linedImage)
+        imageio.imwrite(self.imageOutputDirectory + timeStamp + "_" + self.imagePath, groundtruthImage)
+        imageio.imwrite(self.imageOutputDirectory + timeStamp + "_lined_" + self.imagePath, linedImage)
 
         return self.imageOutputDirectory + timeStamp + "_lined_" + self.imagePath
