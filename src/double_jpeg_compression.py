@@ -50,7 +50,7 @@ def detect(input):
     for idx,ax in enumerate(a1):
         k+=1;
         data = qDCT[:,int(idx/8),int(idx%8)]
-        val,key = np.histogram(data, bins=np.arange(data.min(), data.max()+1),normed = True)
+        val, _ = np.histogram(data, bins=np.arange(data.min(), data.max()+1), density = True)
         z = np.absolute(fftp.fft(val))
         z = np.reshape(z,(len(z),1))
         rotz = np.roll(z,int(len(z)/2))
